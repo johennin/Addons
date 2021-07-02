@@ -2,6 +2,10 @@
 -- https://www.wowinterface.com/forums/showthread.php?t=56143
 -- https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
 
+local playerGUID = UnitGUID("player")
+local name = UnitName("player");
+
+print(name)
 local f1 = CreateFrame("Frame",nil,UIParent)
 f1:SetWidth(1)
 f1:SetHeight(1)
@@ -21,16 +25,13 @@ local function displayupdate(show, message)
     end
 end
 
-local playerGUID = UnitGUID("player")
-local name, realm = UnitName("unit")
-
-local f2 = CreateFrame("Frame")
-f2:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-f2:SetScript("OnEvent", function(self, event)
+local f = CreateFrame("Frame")
+f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+f:SetScript("OnEvent", function(self, event)
 	self:COMBAT_LOG_EVENT_UNFILTERED(CombatLogGetCurrentEventInfo())
 end)
 
-function f2:COMBAT_LOG_EVENT_UNFILTERED(...)
+function f:COMBAT_LOG_EVENT_UNFILTERED(...)
     -- init all data from combat log
 	local timestamp, subevent, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = ...
 	local spellId, spellName, spellSchool
@@ -42,13 +43,13 @@ function f2:COMBAT_LOG_EVENT_UNFILTERED(...)
 		spellId, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(12, ...)
 	end
 
-    if crushing and sourceGUID ~= playerGUID and name == destName then
-        local msg = "|cffff0000CRUSHED for " .. amount .. "|r by " .. sourceName
-        displayupdate(1, msg)
+    if crushing and (sourceGUID ~= playerGUID) and (name == destName) then
+        local msg1 = "|cffff0000CRUSHED for " .. amount .. "|r by " .. sourceName
+        displayupdate(1, msg1)
     end
-
-    if critical and sourceGUID ~= playerGUID and name == destName then
-        local msg = "|cffffff00CRITED for " .. amount .. "|r by " .. sourceName
-        displayupdate(1, msg)
+    
+    if critical and (sourceGUID ~= playerGUID) and (name == destName) then
+        local msg2 = "|cffffff00CRITED for " .. amount .. "|r by " .. sourceName
+        displayupdate(1, msg2)
     end
 end
