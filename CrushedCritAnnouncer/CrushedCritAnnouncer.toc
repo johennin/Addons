@@ -1,0 +1,6 @@
+## Interface: 20501
+## Title: CrushedCritAnnouncer
+## Author: Johan Henning
+## Version: v0.2
+
+main.lua
